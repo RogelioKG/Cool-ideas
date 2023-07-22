@@ -21,8 +21,11 @@ class MonkeyDisabler(type):
             super().__setattr__(key, value)
         else:
             print(f"Monkey patching '{key}' is disabled.")
-
-# type of disable: Sequence[str]
+            
+# 所有在類別 __dict__ 底下的方法與屬性皆無法進行猴子補丁
+# class Cat(metaclass=MonkeyDisabler):
+# 指名在類別 __dict__ 底下的某些方法與屬性不可進行猴子補丁
+# class Cat(metaclass=MonkeyDisabler, disable: Sequence[str]):
 class Cat(metaclass=MonkeyDisabler, disable=["exclaim"]):
     def __init__(self, name):
         self.name = name
