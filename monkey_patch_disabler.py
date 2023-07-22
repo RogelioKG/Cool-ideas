@@ -1,5 +1,13 @@
+#!/usr/bin/env python
 """抓猴神器：防止猴子補丁的最佳夥伴"""
 # implemented by metaclass
+# My POV:
+# 純粹是想練習 metaclass，
+# 否則這樣的設計其實並沒有太多意義
+# 對 Python 而言，開放比起封閉而言還要好。
+# (當然，這並不意味著 Python 不安全。成員的易存取性是在幫助 programmer，和安全問題是兩碼子事)
+# 且 Python 一直都有著 "We are all consenting adults here" 的立場。
+# 我們應該對自己的行為負責，而不是從語言層面去限制對成員或方法的存取。
 
 class MonkeyDisabler(type):
     @classmethod
@@ -12,9 +20,9 @@ class MonkeyDisabler(type):
     def __init__(cls, name, bases, attrs, *, disable=None):
         super().__init__(name, bases, attrs)
         if disable is None:
-            cls.__disable = attrs.keys()
+            cls.__disable = set(attrs.keys())
         else:
-            cls.__disable = disable
+            cls.__disable = set(disable)
 
     def __setattr__(cls, key, value):
         if (key == "_MonkeyDisabler__disable") or (key not in cls._MonkeyDisabler__disable):
